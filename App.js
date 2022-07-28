@@ -1,20 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import ShopNavigator from './navigation/ShopNavigator';
 
 export default function App() {
+  const [loaded]= useFonts({
+    Oswald:require('./assets/fonts/Oswald-Bold.ttf')
+  })
+  if(!loaded) return <AppLoading/>
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+    <ShopNavigator/>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
