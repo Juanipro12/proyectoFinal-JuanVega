@@ -2,6 +2,7 @@ import { URI_API } from "../../constants/DataBase"
 
 
 export const GET_ORDERS = 'GET_ORDERS'
+export const DELETE_ORDER = 'DELETE_ORDER'
 
 
 export const getOrders = () =>{
@@ -23,6 +24,21 @@ export const getOrders = () =>{
             })
         } catch (error) {
             console.log(errors)
+        }
+    }
+}
+export const deleteOrder= (id) =>{
+    return async dispatch =>{
+        try {
+            await fetch(`${URI_API}ordenes/${id}.json`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type' : 'application/json'
+                }
+            });
+            dispatch({type:DELETE_ORDER , orderID:id})
+        } catch (error) {
+            console.log(error)
         }
     }
 }
