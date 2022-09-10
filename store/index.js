@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 import CartReducer from "./reducers/cart.reducer";
 import OrderReducer from "./reducers/orders.reducer";
 import AuthReducer from "./reducers/Auth.reducer";
+import placeReducer from "./reducers/place.reducer";
 
 
 
@@ -14,7 +15,8 @@ const RootReducer = combineReducers({
     cart:CartReducer,
     order: OrderReducer,
     auth:AuthReducer,
-    login:AuthReducer
+    login:AuthReducer,
+    places:placeReducer,
 })
 
 

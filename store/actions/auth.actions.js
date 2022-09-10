@@ -21,7 +21,7 @@ export const signup = (email,password) =>{
             })
         })
         const data = await response.json()
-        console.log(data)
+        
         dispatch({
             type:SIGNUP,
             token:data.idToken,
@@ -43,7 +43,7 @@ export const login = (email,password) =>{
             })
         })
         const data = await response.json()
-        console.log(data)
+       
         dispatch({
             type:LOGIN,
             token:data.idToken,

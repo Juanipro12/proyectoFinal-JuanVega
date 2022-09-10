@@ -5,6 +5,7 @@ import CartNavigator from './CartNavigator'
 import { StyleSheet, Text, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import OrdersNavigator from './OrdersNavigator'
+import PlaceNavigator from './PlaceNavigator'
 
 
 const ButtomsTabs = createBottomTabNavigator()
@@ -50,6 +51,18 @@ const TabNavigator = () => {
                 <View style={styles.item}>
                     <Ionicons name='cash-outline' size={24} color={focused?'blue':'black'}/>
                     <Text>Ordenes</Text>
+                </View>
+            )
+        }}
+        />
+         <ButtomsTabs.Screen 
+        name='Location' 
+        component={PlaceNavigator} 
+        options={{
+            tabBarIcon:({focused}) =>(
+                <View style={styles.item}>
+                    <Ionicons name='location-outline' size={24} color={focused?'blue':'black'}/>
+                    <Text>Location</Text>
                 </View>
             )
         }}
