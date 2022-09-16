@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection:'row'
   },
   text:{
-    fontZise:18,
+    fontSize:18,
     fontFamily:'Oswald',
     padding:8
   }

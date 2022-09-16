@@ -1,10 +1,11 @@
 import { FlatList, StyleSheet, Text, View } from "react-native"
 import PlaceItem from "../component/PlaceItem"
-import {useSelector} from 'react-redux'
-
+import {useSelector,useDispatch} from 'react-redux'
+import { useEffect } from "react"
+import * as addressAction from '../store/actions/place.action'
 
 const PlaceListScreen = ({navigation}) =>{
-
+    const dispach = useDispatch()
     const places = useSelector(state => (state.places.places))
     console.log(places, 'soy places')
     const renderItem = (data) =>{
@@ -17,6 +18,9 @@ const PlaceListScreen = ({navigation}) =>{
             onSelect={()=> navigation.navigate('Detalle')}
             />
     )}
+    useEffect(()=>{
+        dispach(addressAction.loadAddress())
+    },[])
     return(
         <FlatList
             data={places}
