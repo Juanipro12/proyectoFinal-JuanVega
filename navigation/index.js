@@ -10,7 +10,7 @@ const MainNavigator = () => {
   return (
     <NavigationContainer>
       {
-        userId?
+        true?
         <TabNavigator/>:
         <AuthNavigator/>
 

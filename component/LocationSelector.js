@@ -1,25 +1,39 @@
 
 
 import * as Location from 'expo-location'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { Alert, Button, StyleSheet, Text, View } from 'react-native'
-import MapPreview from './MapPreview'
+import MapPreview,{Marker } from 'react-native-maps'
 
 
 const LocationSelector = props =>{
-    const [pickedLocation, setPickedLocation] = useState()
-
+    const [pickedLocation, setPickedLocation] = useState(null)
+    useEffect(()=>{
+        if(!props.setReset)
+        getLocation()
+    },[props.setReset])
+    const selectLocation = (e) =>{
+        setPickedLocation({
+            latitude: e.nativeEvent.coordinate.latitude,
+            longitude:e.nativeEvent.coordinate.longitude,
+        })
+        props.onLocation({
+            lat: e.nativeEvent.coordinate.latitude,
+            lng:e.nativeEvent.coordinate.longitude
+        })
+    }
     const getLocation = async () =>{
         const isLocationOk = await verifyPermissions()
         if(!isLocationOk){
             return
         }
-        const location = await Location.getCurrentPositionAsync({
-            timeout:3000,
-        })
+        const location = await Location.getCurrentPositionAsync()
         setPickedLocation({
-            lat: location.coords.latitude,
-            lng: location.coords.longitude
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta:0.001,
+            longitudeDelta:0.001,
         })
         props.onLocation({
             lat:location.coords.latitude,
@@ -43,15 +57,14 @@ const LocationSelector = props =>{
     return(
         <View style={styles.container}>
             <View style={styles.preview}>
-               <MapPreview location={pickedLocation} style={styles.preview}>
-                    <Text>Location en proceso...</Text>
-               </MapPreview>
+            { pickedLocation &&(
+            <MapPreview initialRegion={pickedLocation} style={styles.preview} onPress={selectLocation}>
+                <Marker title='Ubicacion' coordinate={{
+                    latitude:pickedLocation.latitude,
+                    longitude:pickedLocation.longitude
+                }} />
+               </MapPreview>)}
             </View>
-            <Button
-                title='Obtener location'
-                color='purpure'
-                onPress={getLocation}
-                />
         </View>
     )
 }

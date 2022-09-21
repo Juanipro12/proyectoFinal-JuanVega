@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { KeyboardAvoidingView, View,Platform, TouchableOpacity, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { COLORS } from '../constants/colores';
 import { login, signup } from '../store/actions/auth.actions';
 
 const Authscreen = () => {
@@ -101,10 +100,10 @@ const styles = StyleSheet.create({
     promptButton:{
         fontSize:16,
         fontFamily:'OpenSansBold',
-        color:COLORS.primary
+        color:'black'
     },
     button:{
-        backgroundColor:COLORS.primary,
+        backgroundColor:'black',
         marginVertical:28
     },
     inputContainer:{

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native"
 import * as ImagePicker from 'expo-image-picker'
+import { useEffect } from "react"
 
 
 
@@ -19,7 +20,10 @@ const ImageSelector = (props) =>{
         setPickerdUri(image.uri)
         props.onImage(image.uri)
     }
-
+    useEffect(()=>{
+        if(!props.setReset)
+        setPickerdUri(null)
+    },[props.setReset])
     const veryPermission = async () =>{
         const { status } = await ImagePicker.requestCameraPermissionsAsync()
         if( status !== 'granted' ){
@@ -34,10 +38,10 @@ const ImageSelector = (props) =>{
     }
 
     return(
-        <View style={styles.container}>
-            <View style={styles.preview}>
+        <View >
+            <View>
                 {
-                    !pickerdUri ? <Text>No hay imagen seleccionada</Text>:
+                    !pickerdUri ? <Image style={styles.image} source={require('../constants/fotoPerfilDefault.png')}/>:
                     <Image
                         style={styles.image}
                         source={{ uri: pickerdUri }}
@@ -58,20 +62,9 @@ const ImageSelector = (props) =>{
 export default ImageSelector
 
 const styles = StyleSheet.create({
-    container:{
-        marginBotton:10
-    },
-    preview:{
-        width:'100%',
-        height:200,
-        justifyContent:'center',
-        alignItems:'center',
-        marginBottom:10,
-        borderColor:'blue',
-        borderWidth:1
-    },
     image:{
-        width:'100%',
-        height:'100%'
+        height:120,
+        width:120,
+        borderRadius:100,
     }
 })

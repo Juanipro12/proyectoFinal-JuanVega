@@ -1,11 +1,12 @@
 import * as FileSystem from 'expo-file-system'
 import { API_GEOCODE } from '../../constants/DataBase'
-import { fechtAddress, insertAddres } from '../../db'
+import { fechtContactos, insertContactos, deletedDB } from '../../db'
 
-export const ADD_PLACE = 'ADD_PLACE'
-export const LOAD_PLACES = 'LOAD_PLACES'
+export const ADD_CONTACTO = 'ADD_CONTACTO'
+export const LOAD_CONTACTOS = 'LOAD_CONTACTOS'
+export const DELETE_CONTACTO = 'DELETE_CONTACTO'
 
-export const addPlace = (title,image,location) =>{
+export const addContacto = (name,telefono,image,location) =>{
     return async dispatch => {
         const response =  await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${location.lat},${location.lng}&key=${API_GEOCODE}`)
         if(!response.ok) console.log('No anda la api')
@@ -14,36 +15,44 @@ export const addPlace = (title,image,location) =>{
         if(!resData.results) console.log('No hay dirreccion')
 
         const address = resData.results[0].formatted_address
-       
+        let Path = null
+       if(image){
         const fileName = image.split('/').pop()
-        const Path = FileSystem.documentDirectory + fileName
-
+        Path = FileSystem.documentDirectory + fileName
         try {
             FileSystem.moveAsync({
                 from: image,
                 to:Path
             })
-            const result = await insertAddres(
-                title,
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+        try {
+            const result = await insertContactos(
+                name,
+                telefono,
                 Path,
                 address,
                 location.lat,
                 location.lng
             )
-            console.log(result)
             dispatch({
-                type:ADD_PLACE, 
+                type:ADD_CONTACTO, 
                 payload: {  
                             id:result.insertId,
-                            title, 
-                            image: Path  ,
+                            name,
+                            telefono,
+                            image:Path,
                             coords:{
                                 lat: location.lat,
                                 lng: location.lng
                                 },
                             address:address
                             
-        }})
+        }}).then(()=>fechtContacto())
+
         } catch (error) {
             console.log(error)
             throw error
@@ -53,12 +62,21 @@ export const addPlace = (title,image,location) =>{
 
 
 
-export const loadAddress = () =>{
+export const fechtContacto = () =>{
     return async dispatch =>{
         try {
-            const result = await fechtAddress()
-            console.log(result,'soyres')
-            dispatch({type:LOAD_PLACES, places: result.rows._array })
+            const result = await fechtContactos()
+            return dispatch({type:LOAD_CONTACTOS, contactos: result.rows._array })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+export const deleted = (id) =>{
+    return async dispatch =>{
+        try {
+             await deletedDB(id)
+            dispatch({type:DELETE_CONTACTO, contacto:id })
         } catch (error) {
             console.log(error)
         }
